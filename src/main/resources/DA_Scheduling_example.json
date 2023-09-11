@@ -1,0 +1,67 @@
+{
+  "giorno":"2023-09-08",
+  "consumatori":[
+    {
+      "giorno":"2023-09-08",
+      "smartMeter": "BSD-1834-LOAD-I-1",
+      "allocazione":{
+        "values": [
+          false,
+          false,
+          true,
+          false,
+          true,
+          false,
+          false,
+          false,
+          true,
+          false,
+          true,
+          false,
+          true,
+          false,
+          true,
+          true,
+          false,
+          false,
+          false,
+          false,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "giorno":"2023-09-08",
+      "smartMeter": "s0",
+      "allocazione":{
+        "values": [
+          false,
+          false,
+          true,
+          false,
+          true,
+          false,
+          false,
+          false,
+          true,
+          false,
+          true,
+          false,
+          true,
+          false,
+          true,
+          true,
+          false,
+          true,
+          false,
+          false,
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    }
+  ]
+}

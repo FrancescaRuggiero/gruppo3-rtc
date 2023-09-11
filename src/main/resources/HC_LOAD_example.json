@@ -1,0 +1,7 @@
+{
+  "id_disp":"BSD-1834-LOAD-I-1",
+  "timestamp":"1694198559223",
+  "disp_type":"load",
+  "value":300,
+  "intervalTime":10000
+}
