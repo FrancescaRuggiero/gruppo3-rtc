@@ -2,10 +2,16 @@ package comm;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import controller.DAAvailableEnergyController;
 import controller.DASController;
 import controller.LoadController;
+import controller.TariffController;
+import dto.DAAvailableEnergy;
 import dto.DayAheadScheduling;
 import dto.LoadData;
+import dto.Tariff;
+
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -18,6 +24,8 @@ public class AppKafkaConsumer {
     StreamsBuilder builder;
     KStream<String, String> HCLoadSource;
     KStream<String, String> DASSource;
+    KStream<String, String> DAaenergySource;
+    KStream<String, String> tariffSource;
     KafkaStreams streams;
 
     public AppKafkaConsumer(String applicationId, String brokers) {
@@ -32,7 +40,10 @@ public class AppKafkaConsumer {
         builder = new StreamsBuilder();
         HCLoadSource = builder.stream("HC_LOAD");
         DASSource = builder.stream("DA_SCHEDULING");
+        DAaenergySource = builder.stream("DA_Gen_data");
+        tariffSource = builder.stream("TARIFF");
 
+        
         System.out.println("start!");
 
         DASSource.foreach((key, value) -> {
@@ -62,7 +73,35 @@ public class AppKafkaConsumer {
             System.out.println(loadData);
             LoadController.getInstance().controlLoadData(loadData);
         });
-
+        //AGGIUNTO per topic DayAheadAvailableEnergy
+        DAaenergySource.foreach((key, value) -> {
+            System.out.println("DA_Gen_data topic new message");
+            DAAvailableEnergy dayAheadAvailableEnergy = null;
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+            	dayAheadAvailableEnergy = mapper.readValue(value, DAAvailableEnergy.class);
+            } catch (JsonProcessingException e) {
+                System.err.println("An error occurred during deserialization: " + e.getMessage());
+                throw new RuntimeException(e);
+            }
+            System.out.println(dayAheadAvailableEnergy);
+            DAAvailableEnergyController.getInstance().updateDAAvailableEnergy(dayAheadAvailableEnergy);
+        });
+        //Aggiunto per topic tariff
+        tariffSource.foreach((key, value) -> {
+            System.out.println("Tariff topic new message");
+            Tariff t = null;
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+            	t = mapper.readValue(value, Tariff.class);
+            } catch (JsonProcessingException e) {
+                System.err.println("An error occurred during deserialization: " + e.getMessage());
+                throw new RuntimeException(e);
+            }
+            System.out.println(t);
+            TariffController.getInstance().updateTariff(t);
+        });
+        
         streams = new KafkaStreams(builder.build(), props);
         streams.start();
     }

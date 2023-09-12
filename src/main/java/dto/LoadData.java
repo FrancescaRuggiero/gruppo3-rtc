@@ -44,4 +44,37 @@ public class LoadData {
         return this.deviceId;
     }
 
+	public DeviceType getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(DeviceType deviceType) {
+		this.deviceType = deviceType;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
+
+	public long getIntervalTime() {
+		return intervalTime;
+	}
+
+	public void setIntervalTime(long intervalTime) {
+		this.intervalTime = intervalTime;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+
+    
 }
