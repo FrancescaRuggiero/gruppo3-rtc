@@ -11,17 +11,17 @@ import lombok.ToString;
 @ToString
 public class EconomicStatus {
     // mock
-    private int revenues;
+    private double revenues;
     private int consumption;
-    private int cost;
-    private int loss;
-    // todo
+    private double cost;
+    private double loss;
 
-    public int getConsumption() {
+
+	public int getConsumption() {
         return this.consumption;
     }
 
-    public int getLoss() {
+    public double getLoss() {
         return this.loss;
     }
 }

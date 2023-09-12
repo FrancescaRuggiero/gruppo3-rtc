@@ -4,7 +4,7 @@ import comm.AppKafkaProducer;
 public class App {
     //"172.31.3.218:31200"
     //"localhost:9092"
-    private static String APP_ID = "app-4";
+    private static String APP_ID = "pippo15";
     private static String BROKERS = "172.31.3.218:31200";
 
     public static void main(String[] args) throws InterruptedException {
