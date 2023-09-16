@@ -7,6 +7,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.streams.StreamsConfig;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -28,8 +29,11 @@ public class AppKafkaProducer {
         consumptionWarningKafkaProducer = new KafkaProducer<>(props);
     }
 
-    public static AppKafkaProducer getInstance(String appId, String brokers) {
+    public static AppKafkaProducer getInstance() {
         if (instance == null) {
+            Map<String, String> env = System.getenv();
+            String appId = env.get("APP_ID");
+            String brokers = env.get("BROKERS");
             instance = new AppKafkaProducer(appId, brokers);
         }
         return instance;
