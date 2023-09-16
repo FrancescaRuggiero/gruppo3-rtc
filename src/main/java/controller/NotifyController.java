@@ -5,11 +5,17 @@ import dto.ConsumptionWarning;
 import dto.EconomicStatus;
 import dto.LoadData;
 import dto.Tariff;
+import utils.ConnectionDB;
 import dto.DAAvailableEnergy;
 
 import java.io.IOException;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
+
+import org.bson.Document;
+
+import com.mongodb.client.MongoCollection;
 
 public class NotifyController {
 	private final int ON_OVERC = 1;//FLAG per Accensione o indicatore di overconsumption
@@ -19,6 +25,8 @@ public class NotifyController {
 	private final int MWhTOWh = 1000000; //Fattore di conversione da MWh a Wh
 	private final double kWhTOkWm = 0.1667; //Fattore di conversione da kWh a kWm
 	private final int min = 10;
+
+	
     private static NotifyController instance = null;
 
     public NotifyController() {}
@@ -30,13 +38,8 @@ public class NotifyController {
         return instance;
     }
     public void sendNotification(DAAvailableEnergy ae, Tariff tar, LoadData loadData) {
-    	//DUBBIO: IO BASO LA MIA MISURA DEI COSTI SU TUTTE LE MISURE RICEVUTE IN QUELLA FASCIA ORARIA FINO ALL'ISTANTE DI VIOLAZIONE DEL PIANO, MA EFFETTIVAMENTE NOI NE CATTURIAMO UNA ALLA VOLTA?QUINDI NON POSSO FARE L'ARRAY?
-    	//arraylist di eventi di load data così usiamo più misure per valutare
-		//se carico più dispositivi alla volta e ogni dispositivo consuma tot, il confronto avviene su 1 e non su tutti
-		//lista di dispositivi attivi
-		ArrayList<LoadData> ld = new ArrayList<LoadData>();
-    	ld.add(loadData);
-    	AppKafkaProducer producer = AppKafkaProducer.getInstance("pippo15", "172.31.3.218:31200");
+		ArrayList<LoadData> ld = getLoadDatasFromDB();
+    	AppKafkaProducer producer = AppKafkaProducer.getInstance("PROVA-2", "172.31.3.218:31200");
 		EconomicStatus economicStatus = computeEconomicStatus(ae, ld, LocalTime.now(), tar);
 
 		String message = getMessage(economicStatus, loadData.getDeviceId());
@@ -53,43 +56,61 @@ public class NotifyController {
             throw new RuntimeException(e);
         }
     }
-    private EconomicStatus computeEconomicStatus(DAAvailableEnergy e, ArrayList<LoadData> em, LocalTime fasciaoraria, Tariff tar) {
+
+      private ArrayList<LoadData> getLoadDatasFromDB() {
+    	ArrayList<LoadData> ld = new ArrayList<LoadData>();
+    	LoadData l = new LoadData();
+    	MongoCollection<Document> c = ConnectionDB.getInstance().getDatabase().getCollection("LoadDatas");
+    	for(Document d: c.find()) {
+    		l.setDeviceId((String) d.get("deviceId"));
+    		l.setTimestamp((String) d.get("timestamp"));
+    		l.setDeviceType(LoadData.DeviceType.load); 
+    		l.setValue( Double.valueOf(d.get("value").toString()));
+    		l.setIntervalTime(Long.parseLong(d.get("intervalTime").toString()));
+    		ld.add(l);
+    		System.out.println("LOAD DATA CREATO: "+l+" e grandezza ld: "+ld.size());
+    	}
+		return ld;
+	}
+
+	//Metodo per l'elaborazione dello stato economico
+	private EconomicStatus computeEconomicStatus(DAAvailableEnergy e, ArrayList<LoadData> em, LocalTime fasciaoraria, Tariff tar) {
     	int f = OFF_UNDERC;
     	double cenergy = 0;
 		double avenergy = 0;
 		double cost = 0;
 		double rev = 0;
 		double[] p = e.getProduzione();
-		for(LoadData t: em) {
+		for(LoadData t: em) {//Per ogni misura fai questi calcoli
 			cenergy = cenergy+(t.getValue()*kWhTOkWm);//fattore di conversione di quanti kWh spende in 10 min
-			System.out.println(cenergy);
-			avenergy = getAEUnit(p, fasciaoraria); //* fasciaoraria.getMinute()/min; //Ottieni l'energia disponibile fino a quell'istante
-			System.out.println(avenergy);
-			//cenergy - consumata
-			//av
-			if(cenergy>avenergy) {
-				f=ON_OVERC;
-				cost = getCosts(cenergy, avenergy, tar, fasciaoraria);
-				rev = getRevenues(cenergy,avenergy,tar,fasciaoraria);
-				}
+			avenergy = getAEUnit(p, fasciaoraria)* fasciaoraria.getMinute()/min; //Ottieni l'energia disponibile fino a quell'istante, al momento è settato su una unità
 		}
+		if(cenergy>avenergy) {
+			f=ON_OVERC;
+			cost = getCosts(cenergy, avenergy, tar, fasciaoraria);
+			rev = getRevenues(cenergy,avenergy,tar,fasciaoraria);
+			}
 		return new EconomicStatus(rev,f,cost,rev-cost);
 	}
     
+	//Metodo per ottenere unità di energia disponibile
 private double getAEUnit(double[] p, LocalTime fasciaoraria) {return (p[fasciaoraria.getHour()+1]/FACTOR_UNIT); }
 	
-	//Calcolo l'energia consumata in più di quella stabilità e la moltiplico per il Prezzo Unico Nazionale per ottenere il costo del sovraconsumo
+	//Metodo per ottenere il costo del sovraconsumo
 	private double getCosts(double cenergy, double aenergy, Tariff tar, LocalTime f) { 
 		double diff = (cenergy-aenergy)/kWhTOWh; //Per ottenere l'energia in Wh
 		double[] pun = tar.getPun();
 		return diff*(pun[f.getHour()])/MWhTOWh;//Per ottenere il costo in Wh
 	}
 	
+	//Metodo per ottenere il ricavo dell'energia immessa
 	private double getRevenues(double cenergy, double aenergy, Tariff tar, LocalTime f) { //Calcolo CEI
 		double diff = (aenergy-cenergy)/kWhTOWh; //Per ottenere l'energia in Wh
 		double[] cei = tar.getCei();
 		return diff*(cei[f.getHour()])/MWhTOWh;//Per ottenere il costo in Wh
 	}
+	
+	//Metodo per elaborare il messsaggio della notifica di warning in caso di sovraconsumo o no
 	private String getMessage(EconomicStatus ec, String id) {
 		String message = "Lo scheduling della REC è stato violato: il dispositivo con id " +id + " è acceso.";
 		if(ec.getConsumption()== 1) message = message+"\n La perdita generata a causa della violazione è: "+ec.getLoss()+" euro/Wh.";

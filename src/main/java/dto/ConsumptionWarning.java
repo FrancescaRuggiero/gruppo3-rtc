@@ -19,6 +19,7 @@ public class ConsumptionWarning {
 		this.message = message2;
 		if(consumption2 == 1) this.consumption = Tipi.OVERCONSUMPTION ; //Gestire un valore diverso da "Tipi"
 		else this.consumption = Tipi.UNDERCONSUMPTION;
+		consumption = consumption2;
 		this.loss = d;
 	}*/
 

@@ -22,7 +22,7 @@ public class AppKafkaProducer {
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
         // Set how to serialize key/value pairs
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "serdes.ConsumptionWarningSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "utils.ConsumptionWarningSerializer");
 
         // create the configured producer
         consumptionWarningKafkaProducer = new KafkaProducer<>(props);

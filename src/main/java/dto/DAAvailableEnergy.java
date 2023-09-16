@@ -22,7 +22,9 @@ public class DAAvailableEnergy {
 	private String giorno; //Gestire eccezioni sulla data
     @JsonProperty("PUN")
 	private double[] produzione = new double[ORE];
-
+	
+	/*public DAAvailableEnergy() {}
+	public DAAvailableEnergy(LocalDate g, double[] prod) {giorno = g; produzione = prod;}*/
 	
 	public String getGiorno() {
 		return giorno;
@@ -36,13 +38,6 @@ public class DAAvailableEnergy {
 	public void setProduzione(double[] produzione) {
 		this.produzione = produzione;
 	} 
-	
-	public String toString(){
-		String str = "DAAVAILABLEENERGY: [giorno: "+ giorno +", produzione: \n";
-		for(int i=0; i<ORE; i++) {str = str+i+": "+produzione[i]+" KWh \n";}
-		str = str+"] \n";
-		return str;
-	}
 	
 	public boolean equals(DAAvailableEnergy c) {
 		if(giorno.compareTo(c.getGiorno()) == 0) return true;

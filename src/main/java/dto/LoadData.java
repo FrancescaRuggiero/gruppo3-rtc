@@ -1,18 +1,20 @@
 package dto;
 
+
+import org.bson.Document;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class LoadData {
-    public enum DeviceType {
+    public static enum DeviceType {
         load,
         generation
     }
-
+    
     @JsonProperty("id_disp")
     private String deviceId;
     @JsonProperty("timestamp")
@@ -20,9 +22,10 @@ public class LoadData {
     @JsonProperty("disp_type")
     private DeviceType deviceType; // load or generation, meglio un enum type? TBD
     @JsonProperty("value")
-    private int value;
+    private double value;
     @JsonProperty("intervalTime")
     private long intervalTime;
+
 
     @Override
     public String toString(){
@@ -51,12 +54,12 @@ public class LoadData {
 		this.deviceType = deviceType;
 	}
 
-	public int getValue() {
+	public double getValue() {
 		return value;
 	}
 
-	public void setValue(int value) {
-		this.value = value;
+	public void setValue(double d) {
+		this.value = d;
 	}
 
 	public long getIntervalTime() {
@@ -75,5 +78,8 @@ public class LoadData {
 		this.timestamp = timestamp;
 	}
 
-    
+    public Document convertDoc() {
+		return new Document("deviceId",deviceId).append("timestamp",timestamp).append("type",deviceType).append("value",value).append("intervalTime",intervalTime);
+    	
+    }
 }

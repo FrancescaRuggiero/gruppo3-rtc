@@ -7,7 +7,10 @@ import controller.DAAvailableEnergyController;
 import controller.DASController;
 import controller.LoadController;
 import controller.TariffController;
-import dto.*;
+import dto.DAAvailableEnergy;
+import dto.DayAheadScheduling;
+import dto.LoadData;
+import dto.Tariff;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -35,17 +38,16 @@ public class AppKafkaConsumer {
 
     public void start() throws InterruptedException {
         builder = new StreamsBuilder();
-        HCLoadSource = builder.stream("HC_LOAD");
         DASSource = builder.stream("DA_SCHEDULING");
-
         DAaenergySource = builder.stream("DA_GEN_DATA");
         tariffSource = builder.stream("TARIFF");
+        HCLoadSource = builder.stream("HC_LOAD");
 
         
-        System.out.println("start!");
+        System.out.println("CONSUMER >>");
 
         DASSource.foreach((key, value) -> {
-            System.out.println("DAS topic new message");
+            System.out.println("****New message by DAS Topic****");
             DayAheadScheduling dayAheadScheduling = null;
             ObjectMapper mapper = new ObjectMapper();
             try {
@@ -57,12 +59,11 @@ public class AppKafkaConsumer {
             System.out.println(dayAheadScheduling);
             DASController.getInstance().updateDayAheadScheduling(dayAheadScheduling);
         });
-        System.out.println("Dopo il primo foreach!");
 
       
         //AGGIUNTO per topic DayAheadAvailableEnergy
         DAaenergySource.foreach((key, value) -> {
-            System.out.println("DA_Gen_data topic new message");
+            System.out.println("****New message by DA Available Energy Topic****");
             DAAvailableEnergy dayAheadAvailableEnergy = null;
             ObjectMapper mapper = new ObjectMapper();
             try {
@@ -76,7 +77,7 @@ public class AppKafkaConsumer {
         });
         //Aggiunto per topic tariff
         tariffSource.foreach((key, value) -> {
-            System.out.println("Tariff topic new message");
+            System.out.println("****New message by Tariff Topic****");
             Tariff t = null;
             ObjectMapper mapper = new ObjectMapper();
             try {
@@ -90,7 +91,7 @@ public class AppKafkaConsumer {
         });
         
         HCLoadSource.foreach((key, value) -> {
-            System.out.println("load data topic new message");
+            System.out.println("****New message by Load Data Topic****");
             LoadData loadData = null;
             ObjectMapper mapper = new ObjectMapper();
             try {
@@ -100,6 +101,8 @@ public class AppKafkaConsumer {
                 throw new RuntimeException(e);
             }
             System.out.println(loadData);
+            //LoadController.getInstance().controlLoadData(loadData);
+            LoadController.getInstance().updateActiveLoadData(loadData);
             LoadController.getInstance().controlLoadData(DAAvailableEnergyController.getInstance().getDAAvailableEnergy(),TariffController.getInstance().getTariff(),loadData);
         });
         streams = new KafkaStreams(builder.build(), props);

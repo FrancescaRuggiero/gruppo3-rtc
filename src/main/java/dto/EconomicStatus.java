@@ -15,7 +15,14 @@ public class EconomicStatus {
     private int consumption;
     private double cost;
     private double loss;
+    // todo
 
+   /* public EconomicStatus(double i, int j, double k, double l) {
+    	revenues = i;
+    	consumption = j;
+    	cost = k;
+    	loss = l;
+    }*/
 
 	public int getConsumption() {
         return this.consumption;
