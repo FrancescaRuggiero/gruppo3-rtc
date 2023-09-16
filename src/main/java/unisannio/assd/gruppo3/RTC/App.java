@@ -8,7 +8,7 @@ import utils.ConnectionDB;
 public class App {
     //"172.31.3.218:31200"
     //"localhost:9092"
-    private static String APP_ID = "app2023";
+    private static String APP_ID = "app2024";
     private static String BROKERS = "172.31.3.218:31200";
 
     public static void main(String[] args) throws InterruptedException {
