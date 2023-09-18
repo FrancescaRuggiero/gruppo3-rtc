@@ -16,7 +16,6 @@ public class App {
     private static String APP_ID = env.get("APP_ID");
     private static String BROKERS = env.get("BROKERS");
     private static String MONGO_URI = env.get("MONGO_URI");
-
     public static void main(String[] args) throws InterruptedException {
         ConnectionDB.getInstance().connectToDB(MONGO_URI);
         AppKafkaProducer.getInstance();

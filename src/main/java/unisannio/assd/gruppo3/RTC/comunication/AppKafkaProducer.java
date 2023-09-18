@@ -1,5 +1,6 @@
 package unisannio.assd.gruppo3.RTC.comunication;
 
+import unisannio.assd.gruppo3.RTC.model.Command;
 import unisannio.assd.gruppo3.RTC.model.ConsumptionWarning;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -14,7 +15,7 @@ import java.util.Random;
 public class AppKafkaProducer {
     private KafkaProducer<String, ConsumptionWarning> consumptionWarningKafkaProducer;
     private static AppKafkaProducer instance;
-
+    private KafkaProducer<String, Command> commandKafkaProducer;
     public AppKafkaProducer(String applicationId, String brokers)  {
         // Set properties used to configure the producer
         Properties props = new Properties();
@@ -51,6 +52,21 @@ public class AppKafkaProducer {
             ));
             consumptionWarningKafkaProducer.flush();
             System.out.println("Consumption warning sent: " + consumptionWarning.toString() + "to topic: " + topic);
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+            throw new IOException(ex.toString());
+        }
+    }
+    public void produceCommand(Command comm) throws IOException {
+        try {
+            String topic = "CONTROL_COMMANDS";
+            commandKafkaProducer.send(new ProducerRecord<String, Command>(
+                    topic,
+                    new Random().nextInt(10000)+"",
+                    comm
+            ));
+            commandKafkaProducer.flush();
+            System.out.println("Command sent: " + comm.toString() + "to topic: " + topic);
         } catch (Exception ex) {
             System.out.print(ex.getMessage());
             throw new IOException(ex.toString());

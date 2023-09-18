@@ -15,13 +15,7 @@ public class ConsumptionWarning {
     private int consumption; // sovraproduzione/sottoproduzione
     private double loss; // euro/Wh
 
-	/*public ConsumptionWarning(String message2, int consumption2, double d) {
-		this.message = message2;
-		if(consumption2 == 1) this.consumption = Tipi.OVERCONSUMPTION ; //Gestire un valore diverso da "Tipi"
-		else this.consumption = Tipi.UNDERCONSUMPTION;
-		consumption = consumption2;
-		this.loss = d;
-	}*/
+
 
 	public String getMessage() {
 		return message;

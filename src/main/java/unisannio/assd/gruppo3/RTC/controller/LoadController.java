@@ -33,7 +33,24 @@ public class LoadController {
             Timestamp timestamp = new Timestamp(Long.valueOf(loadData.getTimestamp()));
             boolean scheduled = dayAheadScheduling.isDeviceScheduled(loadData.getDeviceId(), timestamp);
             String id = loadData.getDeviceId();
-            if (!scheduled && !(id.substring(14,15).equalsIgnoreCase("I"))) {
+            if(scheduled) { //Se il dispositivo è schedulato
+                if((id.substring(14,15).equalsIgnoreCase("I")) && (loadData.getValue()==0)) { //Ed è interrompibile ma consuma 0 (è spento) -DA VERIFICARE CHE EFFETTIVAMENTE PUBBLICHINO O MENO QUELLI SPENTI
+                    System.out.println("Call command controller for device "+loadData.getDeviceId());
+                    CommandsController.getInstance().sendCommand(loadData);} //Invia comando (di accensione)
+                else if(loadData.getValue()== 0) { //Se non è interrompibile e consuma 0 (è spento)
+                    System.out.println("Compute and send notification warnings");
+                    NotifyController.getInstance().sendNotification(ae,tar,loadData);// invia la notifica di warning -DA VERIFICARE SE MODIFICARE IL MESSAGGIO
+                }
+            }else if(!scheduled && !(loadData.getValue()==0)){//Se non è schedulato (Se è = 0 allora significa che non è schedulato in realtà)
+                if((id.substring(14,15).equalsIgnoreCase("I"))) { //ed è interrompibile
+                    System.out.println("Call command controller for device "+loadData.getDeviceId());
+                    CommandsController.getInstance().sendCommand(loadData);} //Spegnilo
+                else {
+                    System.out.println("Compute and send notification warnings");
+                    NotifyController.getInstance().sendNotification(ae,tar,loadData);//Altrimenti invia la notifica di warning
+                }
+            }
+            /*if (!scheduled && !(id.substring(14,15).equalsIgnoreCase("I"))) {
                 System.out.println("call command unisannio.assd.gruppo3.RTC.controller to disable device with id: " + loadData.getDeviceId());
                 System.out.println("compute and send notification warnings");
                 NotifyController.getInstance().sendNotification(ae,tar,loadData);
@@ -41,7 +58,7 @@ public class LoadController {
                 Command c = new Command();
                 CommandsController.getInstance().sendCommand(c);
                 System.out.println("Dispositivo interrompibile");
-            }
+            }*/
         }else System.out.println("NON PRENDO DAS");
     }
 

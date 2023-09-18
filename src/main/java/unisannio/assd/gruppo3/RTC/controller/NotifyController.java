@@ -42,7 +42,7 @@ public class NotifyController {
 		AppKafkaProducer producer = AppKafkaProducer.getInstance();
 		EconomicStatus economicStatus = computeEconomicStatus(ae, ld, LocalTime.now(), tar);
 
-		String message = getMessage(economicStatus, loadData.getDeviceId());
+		String message = getMessage(economicStatus, loadData);
 
 		ConsumptionWarning consumptionWarning = new ConsumptionWarning(
 				message,
@@ -111,8 +111,10 @@ public class NotifyController {
 	}
 
 	//Metodo per elaborare il messsaggio della notifica di warning in caso di sovraconsumo o no
-	private String getMessage(EconomicStatus ec, String id) {
-		String message = "Lo scheduling della REC è stato violato: il dispositivo con id " +id + " è acceso.";
+	private String getMessage(EconomicStatus ec, LoadData ld) {
+		String message = "Lo scheduling della REC è stato violato: il dispositivo con id " +ld.getDeviceId();
+		if(ld.getValue()==0) message = message+" è spento ma dovrebbe essere acceso.";
+		else message = message+ " è acceso ma dovrebbe essere spento.";
 		if(ec.getConsumption()== 1) message = message+"\n La perdita generata a causa della violazione è: "+ec.getLoss()+" euro/Wh.";
 		else message = message+" E' presente ancora dell'energia disponibile: per ora ancora non c'è perdita di denaro.";
 		return message;
