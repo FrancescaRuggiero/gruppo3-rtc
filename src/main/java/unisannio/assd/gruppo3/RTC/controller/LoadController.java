@@ -1,13 +1,12 @@
-package controller;
-import dto.*;
-import utils.ConnectionDB;
+package unisannio.assd.gruppo3.RTC.controller;
+import unisannio.assd.gruppo3.RTC.model.*;
+import unisannio.assd.gruppo3.RTC.utils.ConnectionDB;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.bson.Document;
 
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
 
@@ -35,7 +34,7 @@ public class LoadController {
             boolean scheduled = dayAheadScheduling.isDeviceScheduled(loadData.getDeviceId(), timestamp);
             String id = loadData.getDeviceId();
             if (!scheduled && !(id.substring(14,15).equalsIgnoreCase("I"))) {
-                System.out.println("call command controller to disable device with id: " + loadData.getDeviceId());
+                System.out.println("call command unisannio.assd.gruppo3.RTC.controller to disable device with id: " + loadData.getDeviceId());
                 System.out.println("compute and send notification warnings");
                 NotifyController.getInstance().sendNotification(ae,tar,loadData);
             }else {

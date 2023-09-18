@@ -1,6 +1,6 @@
-package controller;
+package unisannio.assd.gruppo3.RTC.controller;
 
-import dto.Tariff;
+import unisannio.assd.gruppo3.RTC.model.Tariff;
 
 public class TariffController {
 	private Tariff t;

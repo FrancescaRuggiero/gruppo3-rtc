@@ -1,8 +1,8 @@
-package serdes;
+package unisannio.assd.gruppo3.RTC.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dto.ConsumptionWarning;
+import unisannio.assd.gruppo3.RTC.model.ConsumptionWarning;
 import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Map;

@@ -1,4 +1,4 @@
-package dto;
+package unisannio.assd.gruppo3.RTC.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

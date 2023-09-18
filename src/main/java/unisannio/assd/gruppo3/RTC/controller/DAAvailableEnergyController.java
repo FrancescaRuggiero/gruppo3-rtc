@@ -1,6 +1,6 @@
-package controller;
+package unisannio.assd.gruppo3.RTC.controller;
 
-import dto.DAAvailableEnergy;
+import unisannio.assd.gruppo3.RTC.model.DAAvailableEnergy;
 
 public class DAAvailableEnergyController {
 	private DAAvailableEnergy dayAheadAvailableEnergy;

@@ -1,7 +1,6 @@
-package controller;
+package unisannio.assd.gruppo3.RTC.controller;
 
-import dto.Command;
-import dto.EconomicStatus;
+import unisannio.assd.gruppo3.RTC.model.Command;
 
 public class CommandsController {
     private static CommandsController instance = null;

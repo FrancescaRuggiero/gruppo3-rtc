@@ -1,9 +1,9 @@
 package unisannio.assd.gruppo3.RTC;
 
 //{"id_disp":"AAA-1834-LOAD-S-2","timestamp":"1694797367000","disp_type":"load","value":30000, "intervalTime":10000}
-import comm.AppKafkaConsumer;
-import comm.AppKafkaProducer;
-import utils.ConnectionDB;
+import unisannio.assd.gruppo3.RTC.comunication.AppKafkaConsumer;
+import unisannio.assd.gruppo3.RTC.comunication.AppKafkaProducer;
+import unisannio.assd.gruppo3.RTC.utils.ConnectionDB;
 
 import java.util.Map;
 

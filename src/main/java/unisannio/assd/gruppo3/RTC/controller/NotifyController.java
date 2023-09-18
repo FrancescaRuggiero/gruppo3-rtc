@@ -1,12 +1,12 @@
-package controller;
+package unisannio.assd.gruppo3.RTC.controller;
 
-import comm.AppKafkaProducer;
-import dto.ConsumptionWarning;
-import dto.EconomicStatus;
-import dto.LoadData;
-import dto.Tariff;
-import utils.ConnectionDB;
-import dto.DAAvailableEnergy;
+import unisannio.assd.gruppo3.RTC.comunication.AppKafkaProducer;
+import unisannio.assd.gruppo3.RTC.model.ConsumptionWarning;
+import unisannio.assd.gruppo3.RTC.model.EconomicStatus;
+import unisannio.assd.gruppo3.RTC.model.LoadData;
+import unisannio.assd.gruppo3.RTC.model.Tariff;
+import unisannio.assd.gruppo3.RTC.utils.ConnectionDB;
+import unisannio.assd.gruppo3.RTC.model.DAAvailableEnergy;
 
 import java.io.IOException;
 

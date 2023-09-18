@@ -1,15 +1,11 @@
-package utils;
+package unisannio.assd.gruppo3.RTC.utils;
 
 
-
-import org.bson.Document;
 
 import com.mongodb.MongoCommandException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoIterable;
 
 
 public class ConnectionDB {

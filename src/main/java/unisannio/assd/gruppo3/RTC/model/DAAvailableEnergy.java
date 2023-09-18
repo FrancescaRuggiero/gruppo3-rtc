@@ -1,9 +1,7 @@
-package dto;
+package unisannio.assd.gruppo3.RTC.model;
 //Classe DAAvailableEnergy
 //Quantit� di energia disponibile per il giorno x nelle corrispettive fasce orarie
 //Letto dal topic DA_gen_data
-
-import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

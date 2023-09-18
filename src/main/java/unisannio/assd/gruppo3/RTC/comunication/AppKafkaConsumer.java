@@ -1,16 +1,16 @@
-package comm;
+package unisannio.assd.gruppo3.RTC.comunication;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import controller.DAAvailableEnergyController;
-import controller.DASController;
-import controller.LoadController;
-import controller.TariffController;
-import dto.DAAvailableEnergy;
-import dto.DayAheadScheduling;
-import dto.LoadData;
-import dto.Tariff;
+import unisannio.assd.gruppo3.RTC.controller.DAAvailableEnergyController;
+import unisannio.assd.gruppo3.RTC.controller.DASController;
+import unisannio.assd.gruppo3.RTC.controller.LoadController;
+import unisannio.assd.gruppo3.RTC.controller.TariffController;
+import unisannio.assd.gruppo3.RTC.model.DAAvailableEnergy;
+import unisannio.assd.gruppo3.RTC.model.DayAheadScheduling;
+import unisannio.assd.gruppo3.RTC.model.LoadData;
+import unisannio.assd.gruppo3.RTC.model.Tariff;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
