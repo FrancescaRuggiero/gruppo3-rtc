@@ -19,15 +19,21 @@ public class AppKafkaProducer {
     public AppKafkaProducer(String applicationId, String brokers)  {
         // Set properties used to configure the producer
         Properties props = new Properties();
+        Properties propc = new Properties();
         // Set the brokers (bootstrap servers)
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
+        propc.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
+        propc.put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
         // Set how to serialize key/value pairs
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
+        propc.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "unisannio.assd.gruppo3.RTC.utils.ConsumptionWarningSerializer");
+        propc.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "unisannio.assd.gruppo3.RTC.utils.CommandSerializer");
 
         // create the configured producer
         consumptionWarningKafkaProducer = new KafkaProducer<>(props);
+        commandKafkaProducer = new KafkaProducer<>(propc);
     }
 
     public static AppKafkaProducer getInstance() {
@@ -54,7 +60,7 @@ public class AppKafkaProducer {
             System.out.println("Consumption warning sent: " + consumptionWarning.toString() + "to topic: " + topic);
         } catch (Exception ex) {
             System.out.print(ex.getMessage());
-            throw new IOException(ex.toString());
+
         }
     }
     public void produceCommand(Command comm) throws IOException {
@@ -69,7 +75,7 @@ public class AppKafkaProducer {
             System.out.println("Command sent: " + comm.toString() + "to topic: " + topic);
         } catch (Exception ex) {
             System.out.print(ex.getMessage());
-            throw new IOException(ex.toString());
+
         }
     }
 }

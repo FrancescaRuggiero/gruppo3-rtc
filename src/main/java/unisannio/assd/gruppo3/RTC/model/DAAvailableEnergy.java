@@ -18,7 +18,7 @@ public class DAAvailableEnergy {
 	private static final int ORE = 24;
     @JsonProperty("giorno")
 	private String giorno; //Gestire eccezioni sulla data
-    @JsonProperty("PUN")
+    @JsonProperty("produzione")
 	private double[] produzione = new double[ORE];
 	
 	/*public DAAvailableEnergy() {}

@@ -54,7 +54,7 @@ public class AppKafkaConsumer {
                 dayAheadScheduling = mapper.readValue(value, DayAheadScheduling.class);
             } catch (JsonProcessingException e) {
                 System.err.println("An error occurred during deserialization: " + e.getMessage());
-                throw new RuntimeException(e);
+
             }
             System.out.println(dayAheadScheduling);
             DASController.getInstance().updateDayAheadScheduling(dayAheadScheduling);
@@ -70,7 +70,7 @@ public class AppKafkaConsumer {
             	dayAheadAvailableEnergy = mapper.readValue(value, DAAvailableEnergy.class);
             } catch (JsonProcessingException e) {
                 System.err.println("An error occurred during deserialization: " + e.getMessage());
-                throw new RuntimeException(e);
+
             }
             System.out.println(dayAheadAvailableEnergy);
             DAAvailableEnergyController.getInstance().updateDAAvailableEnergy(dayAheadAvailableEnergy);
@@ -84,7 +84,7 @@ public class AppKafkaConsumer {
             	t = mapper.readValue(value, Tariff.class);
             } catch (JsonProcessingException e) {
                 System.err.println("An error occurred during deserialization: " + e.getMessage());
-                throw new RuntimeException(e);
+
             }
             System.out.println(t);
             TariffController.getInstance().updateTariff(t);
@@ -98,7 +98,7 @@ public class AppKafkaConsumer {
                 loadData = mapper.readValue(value, LoadData.class);
             } catch (JsonProcessingException e) {
                 System.err.println("An error occurred during deserialization: " + e.getMessage());
-                throw new RuntimeException(e);
+
             }
             System.out.println(loadData);
             //LoadController.getInstance().controlLoadData(loadData);
