@@ -60,7 +60,7 @@ public class AppKafkaProducer {
             System.out.println("Consumption warning sent: " + consumptionWarning.toString() + "to topic: " + topic);
         } catch (Exception ex) {
             System.out.print(ex.getMessage());
-
+            //throw new IOException(ex.toString());
         }
     }
     public void produceCommand(Command comm) throws IOException {
@@ -75,7 +75,7 @@ public class AppKafkaProducer {
             System.out.println("Command sent: " + comm.toString() + "to topic: " + topic);
         } catch (Exception ex) {
             System.out.print(ex.getMessage());
-
+            //throw new IOException(ex.toString());
         }
     }
 }

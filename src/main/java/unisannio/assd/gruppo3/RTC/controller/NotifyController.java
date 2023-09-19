@@ -94,7 +94,7 @@ public class NotifyController {
 	}
 
 	//Metodo per ottenere unità di energia disponibile
-	private double getAEUnit(double[] p, LocalTime fasciaoraria) {return (p[fasciaoraria.getHour()+1]/FACTOR_UNIT); }
+	private double getAEUnit(double[] p, LocalTime fasciaoraria) {return (p[fasciaoraria.getHour()]/FACTOR_UNIT); }
 
 	//Metodo per ottenere il costo del sovraconsumo
 	private double getCosts(double cenergy, double aenergy, Tariff tar, LocalTime f) {
