@@ -97,6 +97,7 @@ public class NotifyController {
 	private double getAEUnit(double[] p, LocalTime fasciaoraria) {return (p[fasciaoraria.getHour()]/FACTOR_UNIT); }
 
 	//Metodo per ottenere il costo del sovraconsumo
+
 	private double getCosts(double cenergy, double aenergy, Tariff tar, LocalTime f) {
 		double diff = (cenergy-aenergy)/kWhTOWh; //Per ottenere l'energia in Wh
 		double[] pun = tar.getPun();

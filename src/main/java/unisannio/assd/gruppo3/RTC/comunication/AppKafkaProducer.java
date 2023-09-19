@@ -31,6 +31,7 @@ public class AppKafkaProducer {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "unisannio.assd.gruppo3.RTC.utils.ConsumptionWarningSerializer");
         propc.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "unisannio.assd.gruppo3.RTC.utils.CommandSerializer");
 
+
         // create the configured producer
         consumptionWarningKafkaProducer = new KafkaProducer<>(props);
         commandKafkaProducer = new KafkaProducer<>(propc);

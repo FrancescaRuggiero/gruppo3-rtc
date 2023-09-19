@@ -60,7 +60,8 @@ public class AppKafkaConsumer {
             DASController.getInstance().updateDayAheadScheduling(dayAheadScheduling);
         });
 
-      
+
+
         //AGGIUNTO per topic DayAheadAvailableEnergy
         DAaenergySource.foreach((key, value) -> {
             System.out.println("****New message by DA Available Energy Topic****");
