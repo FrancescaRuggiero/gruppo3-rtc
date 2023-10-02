@@ -1,3 +1,3 @@
-# poc-rec-rtc
+# Real Time Controller
 
-## Kafka stream
+## RTC
