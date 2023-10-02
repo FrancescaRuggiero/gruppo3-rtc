@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtc-app-deployment
+  labels:
+    app: rtc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rtc-app
+  template:
+    metadata:
+      labels:
+        app: rtc-app
+    spec:
+      containers:
+        - name: rtc-app
+          image: ghcr.io/francescaruggiero/rtc:latest
+          env:
+            - name: APP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: rtc-config-map
+                  key: APP_ID
+            - name: BROKERS
+              valueFrom:
+                configMapKeyRef:
+                  name: rtc-config-map
+                  key: BROKERS
+            - name: MONGO_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: rtc-config-map
+                  key: MONGO_URI

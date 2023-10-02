@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtc-app-deployment
+  labels:
+    app: rtc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rtc-app
+  template:
+    metadata:
+      labels:
+        app: rtc-app
+    spec:
+      containers:
+        - name: rtc-app
+          image: ghcr.io/recrtc/rtc:latest
+          env:
+            - name: APP_ID
+              value: "app-id-oidjhasbdi88"
+            - name: BROKERS
+              value: "localhost:9092"
+            - name: MONGO_URI
+              value: "mongodb://127.0.0.1:27017/"

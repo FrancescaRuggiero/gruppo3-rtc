@@ -1,4 +1,4 @@
-package dto;
+package unisannio.assd.gruppo3.RTC.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

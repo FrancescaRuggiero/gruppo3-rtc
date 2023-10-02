@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rtc-config-map
+data:
+  APP_ID: "app-id-827171985"
+  BROKERS: "172.31.3.218:31200"
+  MONGO_URI: "mongodb://mongo:27017/"

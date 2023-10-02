@@ -1,6 +1,6 @@
-package controller;
+package unisannio.assd.gruppo3.RTC.controller;
 
-import dto.DayAheadScheduling;
+import unisannio.assd.gruppo3.RTC.model.DayAheadScheduling;
 
 public class DASController {
         private DayAheadScheduling dayAheadScheduling;

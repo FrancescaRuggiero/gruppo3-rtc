@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo-replica
+  labels:
+    app: mongo-replica
+spec:
+  serviceName: mongo
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-replica
+  template:
+    metadata:
+      labels:
+        app: mongo-replica
+    spec:
+      containers:
+        - image: mongo:4.4.6-bionic
+          name: mongo
+          command: ["mongod", "--replSet", "rs", "--dbpath", "/data/db", "--bind_ip_all", "--port", "27017"]
+          ports:
+            - containerPort: 27017
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/data/db"
+              name: mongo-replica-storage
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-replica-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app: mongo-replica
+spec:
+  ports:
+    - port: 27017
+      name: mongo-port
+  clusterIP: None
+  selector:
+    app: mongo-replica
